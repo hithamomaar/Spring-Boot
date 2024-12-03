@@ -32,6 +32,7 @@ public class CruddemoApplication {
 	private void createInstructorWithCourses(AppDAO appDAO) {
 		Instructor instructor =
 				new Instructor("Ahmed", "Yahia", "yahia.a1000@gmail.com");
+
 		InstructorDetail instructorDetail =
 				new InstructorDetail("http://www.youtube.com/test", "Coding");
 
