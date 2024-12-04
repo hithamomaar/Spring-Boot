@@ -1,9 +1,7 @@
 package com.hitham.cruddemo;
 
 import com.hitham.cruddemo.dao.AppDAO;
-import com.hitham.cruddemo.entity.Course;
-import com.hitham.cruddemo.entity.Instructor;
-import com.hitham.cruddemo.entity.InstructorDetail;
+import com.hitham.cruddemo.entity.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,21 +19,108 @@ public class CruddemoApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-//			createInstructor(appDAO);
-//			findInstructor(appDAO);
-//			deleteInstructor(appDAO);
-//			findInstructorDetail(appDAO);
-//			deleteInstructorDetail(appDAO);
-//			createInstructorWithCourses(appDAO);
-//			findInstructorWithCourses(appDAO);
-//			findCoursesByInstructorId(appDAO);
-//			findInstructorWithCoursesJoinFetch(appDAO);
-//			updateInstructor(appDAO);
-//			updateCourse(appDAO);
-//			deleteInstructor(appDAO);
-
-			deleteCourse(appDAO);
+//			createCourseAndStudents(appDAO);
+//			findCourseAndStudents(appDAO);
+//			findStudentAndCourses(appDAO);
+//			addMoreCoursesForStudent(appDAO);
+//			deleteCourse(appDAO);
+			deleteStudent(appDAO);
 		};
+	}
+
+	private void deleteStudent(AppDAO appDAO) {
+		int id = 2;
+		System.out.println("Deleting Student id: " + id);
+
+		appDAO.deleteStudentById(id);
+		System.out.println("DONE!");
+	}
+
+	private void addMoreCoursesForStudent(AppDAO appDAO) {
+		int id = 2;
+		Student student = appDAO.findStudentAndCoursesByStudentId(id);
+
+		Course course1 = new Course("JAVASCRIPT");
+		Course course2 = new Course("GO");
+
+		student.addCourse(course1);
+		student.addCourse(course2);
+
+		System.out.println("Updating student: " + student);
+		System.out.println("Associated courses: " + student.getCourses());
+
+		appDAO.update(student);
+
+		System.out.println("DONE!");
+	}
+
+	private void findStudentAndCourses(AppDAO appDAO) {
+		int id = 2;
+		Student student = appDAO.findStudentAndCoursesByStudentId(id);
+
+		System.out.println("Leaded student: " + student);
+		System.out.println("Courses: " + student.getCourses());
+
+		System.out.println("DONE!");
+	}
+
+	private void findCourseAndStudents(AppDAO appDAO) {
+		int id = 10;
+		Course course = appDAO.findCourseAndStudentsByCourseId(id);
+
+		System.out.println("Leaded Course: " + course);
+		System.out.println("Students: " + course.getStudents());
+
+		System.out.println("DONE!");
+	}
+
+	private void createCourseAndStudents(AppDAO appDAO) {
+		Course course = new Course("Python");
+
+		Student student1 = new Student("Hitham", "Omar", "hitham.a1000@gmail.com");
+		Student student2 = new Student("Mohamed", "Saady", "saady.a1000@gmail.com");
+
+		course.addStudent(student1);
+		course.addStudent(student2);
+
+		System.out.println("saving course: " + course);
+		System.out.println("associated students: " + course.getStudents());
+
+		appDAO.save(course);
+		System.out.println("DONE!");
+	}
+
+	private void deleteCourseAndReviews(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Deleting course id: " + id);
+
+		appDAO.deleteCourseById(id);
+	}
+
+	private void retrieveCourseAndReviews(AppDAO appDAO) {
+		int id = 10;
+		Course course = appDAO.findCourseAndReviewByCourseId(id);
+
+		System.out.println(course);
+
+		System.out.println(course.getReviews());
+
+		System.out.println("DONE!");
+	}
+
+	private void createCourseAndReviews(AppDAO appDAO) {
+		Course course = new Course("JAVASCRIPT");
+
+		course.addReview(new Review("Nice Course, Worst Lang"));
+		course.addReview(new Review("Dumb course"));
+
+		System.out.println("SAVING course");
+		System.out.println(course);
+		System.out.println(course.getReviews());
+
+		appDAO.save(course);
+
+		System.out.println("DONE!");
 	}
 
 	private void deleteCourse(AppDAO appDAO) {
